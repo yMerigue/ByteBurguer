@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Roboto:wght@100;400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styleprincipal.css') }}">
+  <link rel="icon" href="./img/WhatsApp Image 2023-09-12 at 15.34.05.jpg">
+
+  <title>Cadastro de conta</title>
+  {% block head %}
+  {% endblock %}
+</head>
+
+<body>
+  <div class="container-full2">
+    <div class="form-container">
+      <form id="bordaFormLeft">
+        <h1 class="principal">Dados pessoais</h1>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputName">Nome</label>
+            <input type="text" class="form-control" id="inputName" placeholder="Digite o seu nome completo">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputData">Data de nascimento</label>
+            <input type="date" class="form-control" id="inputData" placeholder="Informe seu sobrenome">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputCpf">CPF</label>
+            <input type="text" class="form-control" id="inputCpf" placeholder="Informe o seu CPF">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputTel">Telefone</label>
+            <input type="tel" class="form-control" id="inputTel" placeholder="Ex: (xx) xxxxx-xxxx">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail">Email</label>
+            <input type="email" class="form-control" id="inputEmail" placeholder="Digite o seu email">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputSenha">Senha</label>
+            <input id="inputSenha" class="form-control" type="password" placeholder="Digite uma senha"></input>
+          </div>
+        </div>
+      </form>
+
+      <form id="bordaFormRight">
+        <h1 class="principal">Endereço</h1>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputCep">CEP</label>
+            <input type="text" class="form-control" id="inputCep" placeholder="Informe o seu CEP">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputEstado">Estado</label>
+            <input type="tel" class="form-control" id="inputEstado" placeholder="Informe o estado">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputCidade">Cidade</label>
+            <input type="text" class="form-control" id="inputCidade" placeholder="Informe a sua cidade">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputEndereco">Endereço</label>
+            <input type="tel" class="form-control" id="inputEndereco" placeholder="Informe o nome da rua">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputBairro">Bairro</label>
+            <input type="text" class="form-control" id="inputBairro" placeholder="Informe o seu bairro">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputComplemento">Complemento</label>
+            <input type="tel" class="form-control" id="inputComplemento"
+              placeholder="Ex: número da casa, apartamento...">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="button-container">
+      <button type="submit" id="button" class="btn btn-primary">CADASTRAR</button>
+    </div>
+  </div>
+
+
+  <script>
+    function buscaCep() {
+      let cep = document.getElementById('inputCep').value;
+      if (cep !== "") {
+        let url = "https://brasilapi.com.br/api/cep/v1/" + cep;
+
+        let req = new XMLHttpRequest();
+        req.open("GET", url);
+        req.send();
+
+        req.onload = function () {
+          if (req.status === 200) {
+            let endereco = JSON.parse(req.response);
+            document.getElementById("inputEndereco").value = endereco.street;
+            document.getElementById("inputBairro").value = endereco.neighborhood;
+            document.getElementById("inputCidade").value = endereco.city;
+            document.getElementById("inputEstado").value = endereco.state;
+          }
+          else if (req.status === 404) {
+            alert("CEP inválido");
+          }
+          else {
+            alert("Erro ao fazer a requisição");
+          }
+        }
+      }
+    }
+
+    window.onload = function () {
+      let cep = document.getElementById("inputCep");
+      cep.addEventListener("blur", buscaCep);
+    };
+
+  </script>
+  {% block body %}
+  {% endblock %}
+</body>
+
+</html>
